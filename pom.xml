@@ -17,6 +17,8 @@
         <module>bigdata-nfl-dataimport</module>
         <module>bigdata-nfl-dataprocessing</module>
         <module>bigdata-nfl-visualization</module>
+        <module>bigdata-nfl-hive</module>
+        <module>bigdata-nfl-oozie</module>
     </modules>
     <repositories>
         <repository>
