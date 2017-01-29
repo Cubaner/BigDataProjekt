@@ -16,10 +16,9 @@
       <plugins>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.3.2</version>
           <configuration>
-            <source>1.6</source>
-            <target>1.6</target>
+            <source>1.7</source>
+            <target>1.7</target>
           </configuration>
         </plugin>
       </plugins>
@@ -48,16 +47,6 @@
       </plugin>
     </plugins>
   </build>
-  <repositories>
-    <repository>
-      <releases />
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>cloudera</id>
-      <url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
-    </repository>
-  </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -180,7 +169,7 @@
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-common</artifactId>
-      <version>2.6.0-cdh5.8.0</version>
+      <version>2.6.0-cdh5.8.4</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -342,10 +331,16 @@
       </exclusions>
     </dependency>
   </dependencies>
-  <properties>
-    <flume.version>1.6.0-cdh5.8.0</flume.version>
-    <hadoop.version>2.6.0-cdh5.8.0</hadoop.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>de.fhm.bigdata.projekt</groupId>
+        <artifactId>bigdata-nfl-versions</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
 
