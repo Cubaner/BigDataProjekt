@@ -66,6 +66,9 @@
 		
 	</dependencies>
 
-
+	<build>
+		<finalName>bigdata-nfl-hbase-interface</finalName>
+	</build>
+	
 
 </project>

@@ -93,6 +93,9 @@ public class TwitterSource extends AbstractSource
     cb.setOAuthAccessTokenSecret(accessTokenSecret);
     cb.setJSONStoreEnabled(true);
     cb.setIncludeEntitiesEnabled(true);
+    
+    cb.setHttpProxyHost("10.60.17.102");
+    cb.setHttpProxyPort(8080);//port
 
     twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
   }

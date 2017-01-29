@@ -11,7 +11,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <cdh.hive.version>1.1.0-cdh5.8.4</cdh.hive.version>
         <cdh.hadoop.version>2.6.0-cdh5.8.4</cdh.hadoop.version>
-        <flume.version>1.6.0-cdh5.8.0</flume.version>
+        <flume.version>1.6.0-cdh5.8.4</flume.version>
 	</properties>
   
   <dependencyManagement>
@@ -79,7 +79,8 @@
     <dependency>
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-stream</artifactId>
-      <version>4.0.6</version>
+      <!--<version>4.0.6</version> -->
+      <version>3.0.5</version>
     </dependency>
 
     <!-- Hadoop Dependencies -->
@@ -101,6 +102,10 @@
       <version>${hadoop.version}</version>
       <scope>provided</scope>
     </dependency>
+    
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>2.3.2</version>
   </dependencies>
   </dependencyManagement>
   
