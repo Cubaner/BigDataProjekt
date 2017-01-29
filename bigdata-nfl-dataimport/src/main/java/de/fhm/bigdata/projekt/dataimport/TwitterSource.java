@@ -59,6 +59,9 @@ public class TwitterSource extends AbstractSource
   private String accessToken;
   private String accessTokenSecret;
 
+  private String proxyHost;
+  private String proxyPort;
+  
   private String[] keywords;
 
   /** The actual Twitter stream. It's set up to collect raw JSON data */
@@ -75,6 +78,10 @@ public class TwitterSource extends AbstractSource
     consumerSecret = context.getString(TwitterSourceConstants.CONSUMER_SECRET_KEY);
     accessToken = context.getString(TwitterSourceConstants.ACCESS_TOKEN_KEY);
     accessTokenSecret = context.getString(TwitterSourceConstants.ACCESS_TOKEN_SECRET_KEY);
+    
+    proxyHost = context.getString(TwitterSourceConstants.PROXY_HOST);
+
+    proxyPort = context.getString(TwitterSourceConstants.PROXY_PORT);
 
     String keywordString = context.getString(TwitterSourceConstants.KEYWORDS_KEY, "");
     if (keywordString.trim().length() == 0) {
