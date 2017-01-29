@@ -20,6 +20,12 @@
     <flume.version>1.6.0-cdh5.8.0</flume.version>
     <hadoop.version>2.6.0-cdh5.8.0</hadoop.version>
   </properties>
+  
+  	<dependencyManagement>
+		<groupId>de.fhm.bigdata.projekt</groupId>
+    	<artifactId>bigdata-nfl-versions</artifactId>
+  		<version>1.0.0-SNAPSHOT</version>
+	</dependencyManagement>
 
   <build>
     <plugins>
@@ -82,7 +88,7 @@
     <dependency>
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-stream</artifactId>
-      <version>3.0.5</version>
+      <version>4.0.6</version>
     </dependency>
 
     <!-- Hadoop Dependencies -->
