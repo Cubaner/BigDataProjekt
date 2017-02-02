@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>BigData-Projekt</title>
+	
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" href="css/dashboard.css">
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.css">
+	<script type="text/javascript" language="javascript"
+		src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script>
+		$(document)
+				.ready(
+						function() {
+							var restAPI = "http://localhost:8080/bigdata-nfl-hbase-interface/api/nfl/getTeamstatictics";
+	
+							$.getJSON(restAPI, function(json) {
+								var tr;
+								for (var i = 0; i < json.length; i++) {
+									tr = $('<tr/>');
+									tr.append("<td>" + json[i].teamName + "</td>");
+									tr.append("<td>" + json[i].rank + "</td>");
+									$('table').append(tr);
+								}
+							});
+						});
+	</script>
+	<style>
+	.bar {
+		fill: steelblue;
+	}
+	
+	.bar:hover {
+		fill: brown;
+	}
+	
+	.axis--x path {
+		display: none;
+	}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">NFL-Statistics</a>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid" data-toggle="collapse">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li class="active"><a href="#">Overview <span
+							class="sr-only">(current)</span></a></li>
+					<li><a href="#">Reports</a></li>
+					<li><a href="#">Analytics</a></li>
+					<li><a href="#">Export</a></li>
+				</ul>
+
+			</div>
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<h1 class="page-header">Dashboard</h1>
+
+				<svg width="960" height="500"></svg>
+
+				<h2 class="sub-header">All Teams</h2>
+				<div id="dvTable"></div>
+				<div class="table-responsive">
+					<table id="resultsTable" class="table table-striped">
+						<thead>
+							<tr>
+								<th>Team Name</th>
+								<th>Rank</th>
+							</tr>
+
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="js/d3.v4.min.js"></script>
+
+	<!-- 	<script type="text/javascript" language="javascript" -->
+	<!-- 		src="http://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script> -->
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
+
+	<script>
+		var svg = d3.select("svg"), margin = {
+			top : 20,
+			right : 20,
+			bottom : 30,
+			left : 40
+		}, width = +svg.attr("width") - margin.left - margin.right, height = +svg
+				.attr("height")
+				- margin.top - margin.bottom;
+
+		var x = d3.scaleBand().rangeRound([ 0, width ]).padding(0.1), y = d3
+				.scaleLinear().rangeRound([ height, 0 ]);
+
+		var g = svg.append("g").attr("transform",
+				"translate(" + margin.left + "," + margin.top + ")");
+
+		d3.tsv("data/data.tsv", function(d) {
+			d.frequency = +d.frequency;
+			return d;
+		}, function(error, data) {
+			if (error)
+				throw error;
+
+			x.domain(data.map(function(d) {
+				return d.letter;
+			}));
+			y.domain([ 0, d3.max(data, function(d) {
+				return d.frequency;
+			}) ]);
+
+			g.append("g").attr("class", "axis axis--x").attr("transform",
+					"translate(0," + height + ")").call(d3.axisBottom(x));
+
+			g.append("g").attr("class", "axis axis--y").call(
+					d3.axisLeft(y).ticks(10, "%")).append("text").attr(
+					"transform", "rotate(-90)").attr("y", 6).attr("dy",
+					"0.71em").attr("text-anchor", "end").text("Frequency");
+
+			g.selectAll(".bar").data(data).enter().append("rect").attr("class",
+					"bar").attr("x", function(d) {
+				return x(d.letter);
+			}).attr("y", function(d) {
+				return y(d.frequency);
+			}).attr("width", x.bandwidth()).attr("height", function(d) {
+				return height - y(d.frequency);
+			});
+		});
+	</script>
+</body>
+
+</html>
