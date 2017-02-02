@@ -38,7 +38,6 @@ public class JerseyService {
 			j++;
 		}
 		*/
-		connMan.getTopHasttags();
 		return createTestTeams();
 	}
 	
