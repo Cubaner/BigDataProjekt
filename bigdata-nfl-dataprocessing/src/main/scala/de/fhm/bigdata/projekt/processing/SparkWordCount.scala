@@ -15,11 +15,24 @@ object SparkWordCount {
 
     import hiveContext.implicits._
     import hiveContext.sql
-    hiveContext.sql("ADD JAR /home/cloudera/Desktop/BigDataProjekt/bigdata-nfl-hive/target/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar")
-    val tokenized = hiveContext.sql("select tweets.text from tweets")
-    tokenized.map(t => "Tweettext: " + t(0)).collect().foreach(println)
-    val tokenized1 = tokenized.collect().map(x=>x.split(";"))
-    tokenized1.groupBy("tweets.text").count().show()
+    hiveContext.sql("ADD JAR /home/cloudera/BigData/BigDataProjekt/bigdata-nfl-hive/target/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar")
+    
+    val trimmed_tweets = hiveContext.sql("select tweets.text from tweets").map(row => row.getString(0)).flatMap(_.split("#"))
+    
+  //.toLowerCase()
+  //.filter(_.nonEmpty)
+    
+    //val tokenized = hiveContext.sql("select tweets.text from tweets")
+    trimmed_tweets.map(t => "Tweettext: " + t).collect().foreach(println)
+    val wordCounts = trimmed_tweets.map((_, 1)).reduceByKey(_ + _)
+    
+    val filtered = wordCounts.filter(_._2 >= 3)
+    
+    //Die Map durchgehend in HBASE speichern
+    
+    System.out.println(filtered.collect().mkString(", "))
+    //val tokenized1 = tokenized.collect().map(x=>x.split(";"))
+    //trimmed_tweets.groupBy("tweets.text").count().show()
    // dataFrame.select("tweets.text").rdd.map(r => r(0)).collect()
   //  val counts = pairs.reduceByKey((a, b) => a + b)
    // tokenized.count()
@@ -32,7 +45,7 @@ object SparkWordCount {
     val threshold = args(1).toInt
     // split each document into words
 
-    System.out.println(tokenized)
+    System.out.println(trimmed_tweets)
   //   val tokenized = hiveContext.sql().flatMap(_.split(" "))
     // count the occurrence of each word
  //   val wordCounts = tokenized.map((_, 1)).reduceByKey(_ + _)
