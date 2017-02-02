@@ -27,37 +27,46 @@ public class HBaseConnectionManager {
 
 	private static Configuration conf;
 	
-	private static String TABLE_TEAMS = "teams";
-	private static String COLUMN_TEAM = "team";
-	private static String COLUMN_RANK = "rank";
+	private static String TABLE_TEST = "test2";
+	private static String TABLE_TEAMS = "";
+	private static String TABLE_HASHTAGS = "";
 
+	private static final byte[] COLUMN_FAMILY_REPODATA = Bytes.toBytes("familiy_a");
+	private static final byte[] COLUMN_REPODATA_NAME = Bytes.toBytes("column-1");
+	
+	private static final byte[] COLUMN_FAMILY = Bytes.toBytes("");
+	private static final byte[] COLUMN_A = Bytes.toBytes("");
+	
 	public HBaseConnectionManager() {
 		conf = HBaseConfiguration.create();
 	}
 
 
-	public List<String> getRepositories() {
+	public List<String> getTopHasttags() {
 		
 
 		List<String> resultList = new ArrayList<String>();
 		ResultScanner rs = null;
 		Result res = null;
-		String sOwner = null;
-		String sName = null;
-		String s = null;
+		String hashtag = null;
+		int counter;
+		String result = null;
 		try {
-			HTable table = new HTable(conf, TABLE_TEAMS);
+			HTable table = new HTable(conf, TABLE_TEST);
 			Scan scan = new Scan();
-			//scan.addColumn(BYTE_COLUMN_FAMILY_REPODATA, BYTE_COLUMN_REPODATA_NAME);
+			scan.addColumn(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
 			rs = table.getScanner(scan);
 			while ((res = rs.next()) != null) {
 
-				//byte[] repoName = res.getValue(BYTE_COLUMN_FAMILY_REPODATA, BYTE_COLUMN_REPODATA_NAME);
+				byte[] rohHashtag = res.getValue(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
+				byte[] rohCounter = res.getValue(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
 
-				//sName = Bytes.toString(repoName);
-				s = sOwner + "/" + sName;
-				if (!resultList.contains(s)) {
-					resultList.add(s);
+
+				hashtag = Bytes.toString(rohHashtag);
+				counter = Bytes.toInt(rohCounter);
+				result = hashtag + ":" + counter;
+				if (!resultList.contains(result)) {
+					resultList.add(result);
 				}
 			}
 		} catch (IOException e) {
@@ -65,7 +74,10 @@ public class HBaseConnectionManager {
 		} finally {
 			rs.close();
 		}
+		System.out.println(resultList.toString());
 		return resultList;
+		
+
 	}
 
 	
