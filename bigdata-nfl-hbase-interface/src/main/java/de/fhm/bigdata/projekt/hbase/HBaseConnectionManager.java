@@ -29,7 +29,7 @@ public class HBaseConnectionManager {
 	
 	private static String TABLE_TEST = "test2";
 	private static String TABLE_TEAMS = "";
-	private static String TABLE_HASHTAGS = "";
+	private static String TABLE_HASHTAGS = "hashtags";
 
 	private static final byte[] COLUMN_FAMILY_REPODATA = Bytes.toBytes("familiy_a");
 	private static final byte[] COLUMN_REPODATA_NAME = Bytes.toBytes("column-1");
@@ -37,12 +37,16 @@ public class HBaseConnectionManager {
 	private static final byte[] COLUMN_FAMILY = Bytes.toBytes("");
 	private static final byte[] COLUMN_A = Bytes.toBytes("");
 	
+	private static final byte[] COLUMN_FAMILY_HASHTAGS = Bytes.toBytes("hashtag_family");
+	private static final byte[] COLUMN_HASHTAGS_NAME = Bytes.toBytes("hashtag");
+	private static final byte[] COLUMN_HASHTAGS_COUNTER = Bytes.toBytes("counter");
+	
 	public HBaseConnectionManager() {
 		conf = HBaseConfiguration.create();
 	}
 
 
-	public List<String> getTopHasttags() {
+	public List<String> test() {
 		
 
 		List<String> resultList = new ArrayList<String>();
@@ -58,8 +62,8 @@ public class HBaseConnectionManager {
 			rs = table.getScanner(scan);
 			while ((res = rs.next()) != null) {
 
-				byte[] rohHashtag = res.getValue(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
-				byte[] rohCounter = res.getValue(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
+				byte[] rohHashtag = res.getValue(COLUMN_FAMILY_HASHTAGS, COLUMN_HASHTAGS_NAME);
+				byte[] rohCounter = res.getValue(COLUMN_FAMILY_HASHTAGS, COLUMN_HASHTAGS_COUNTER);
 
 
 				hashtag = Bytes.toString(rohHashtag);
@@ -76,8 +80,38 @@ public class HBaseConnectionManager {
 		}
 		System.out.println(resultList.toString());
 		return resultList;
-		
+	}
+	
+	public ArrayList<Hashtag> getTopHashtags() {
+		ArrayList<Hashtag> resultList = new ArrayList<Hashtag>();
+		ResultScanner rs = null;
+		Result res = null;
+		String hashtag = null;
+		int counter;
+		Hashtag result = null;
+		try {
+			HTable table = new HTable(conf, TABLE_HASHTAGS);
+			Scan scan = new Scan();
+			scan.addColumn(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
+			rs = table.getScanner(scan);
+			while ((res = rs.next()) != null) {
 
+				byte[] rohHashtag = res.getValue(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
+				byte[] rohCounter = res.getValue(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
+
+				hashtag = Bytes.toString(rohHashtag);
+				counter = Bytes.toInt(rohCounter);
+				result = new Hashtag (hashtag, counter);
+				if (!resultList.contains(result)) {
+					resultList.add(result);
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("Exception occured in retrieving data");
+		} finally {
+			rs.close();
+		}
+		return resultList;
 	}
 
 	

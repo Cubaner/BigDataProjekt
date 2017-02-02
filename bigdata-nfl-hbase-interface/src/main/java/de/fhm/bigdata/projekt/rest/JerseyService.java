@@ -41,6 +41,16 @@ public class JerseyService {
 		return createTestTeams();
 	}
 	
+	@GET
+	@Path("getTopHashtags")
+	@Produces(MediaType.APPLICATION_JSON +";charset=utf-8")
+	public ArrayList<Hashtag> getTopHashtags() {
+		HBaseConnectionManager connMan = new HBaseConnectionManager();
+			
+		return connMan.getTopHashtags();
+		
+	}
+	
 	private ArrayList<NFLTeam> createTestTeams() {
 		ArrayList<NFLTeam> test = new ArrayList<NFLTeam>();
 		test.add(new NFLTeam("GreenBayPackers", 1));
