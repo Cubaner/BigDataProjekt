@@ -44,7 +44,7 @@ object HashtagCounter {
     val myTable = new HTable(conf, tableName);
         filtered.collect().foreach(y => {
        val a = y.toString().split(",")(0).replace("(", "")
-       val b = y.toString().split(",")(1).replace("(", "")
+       val b = y.toString().split(",")(1).replace(")", "")
     	 //if (a != ""
       //var p = new Put();
       var p = new Put(new String(a + b).getBytes()); //hashtag und timestamp?
