@@ -50,9 +50,9 @@ public class HBaseConnectionManager {
         try {
             config = HBaseConfiguration.create();
             config.clear();
-            config.set("hbase.zookeeper.quorum", "10.60.68.80");
+            config.set("hbase.zookeeper.quorum", "localhost");
             config.set("hbase.zookeeper.property.clientPort","2181");
-            config.set("hbase.master", "10.60.68.80:60000");
+            config.set("hbase.master", "localhost:60000");
             //HBaseConfiguration config = HBaseConfiguration.create();
             //config.set("hbase.zookeeper.quorum", "localhost");  // Here we are running zookeeper locally
             HBaseAdmin.checkHBaseAvailable(config);
