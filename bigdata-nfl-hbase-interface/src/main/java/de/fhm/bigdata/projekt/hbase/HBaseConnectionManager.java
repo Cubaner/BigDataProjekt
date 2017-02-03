@@ -10,6 +10,9 @@ import java.util.Map.Entry;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.MasterNotRunningException;
+import org.apache.hadoop.hbase.ZooKeeperConnectionException;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -21,11 +24,13 @@ import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import com.google.protobuf.ServiceException;
+
 import de.fhm.bigdata.projekt.hbase.model.*;
 
 public class HBaseConnectionManager {
 
-	private static Configuration conf;
+	private static Configuration config;
 	
 	private static String TABLE_TEST = "test2";
 	private static String TABLE_TEAMS = "";
@@ -42,7 +47,32 @@ public class HBaseConnectionManager {
 	private static final byte[] COLUMN_HASHTAGS_COUNTER = Bytes.toBytes("counter");
 	
 	public HBaseConnectionManager() {
-		conf = HBaseConfiguration.create();
+        try {
+            config = HBaseConfiguration.create();
+            config.clear();
+            config.set("hbase.zookeeper.quorum", "10.60.68.80");
+            config.set("hbase.zookeeper.property.clientPort","2181");
+            config.set("hbase.master", "10.60.68.80:60000");
+            //HBaseConfiguration config = HBaseConfiguration.create();
+            //config.set("hbase.zookeeper.quorum", "localhost");  // Here we are running zookeeper locally
+            HBaseAdmin.checkHBaseAvailable(config);
+
+
+            System.out.println("HBase is running!");
+        //  createTable(config);    
+            //creating a new table
+        } catch (MasterNotRunningException e) {
+            System.out.println("HBase is not running!");
+        } catch (ZooKeeperConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
@@ -56,7 +86,7 @@ public class HBaseConnectionManager {
 		int counter;
 		String result = null;
 		try {
-			HTable table = new HTable(conf, TABLE_TEST);
+			HTable table = new HTable(config, TABLE_TEST);
 			Scan scan = new Scan();
 			scan.addColumn(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
 			rs = table.getScanner(scan);
@@ -87,10 +117,10 @@ public class HBaseConnectionManager {
 		ResultScanner rs = null;
 		Result res = null;
 		String hashtag = null;
-		int counter;
+		String counter;
 		Hashtag result = null;
 		try {
-			HTable table = new HTable(conf, TABLE_HASHTAGS);
+			HTable table = new HTable(config, TABLE_HASHTAGS);
 			Scan scan = new Scan();
 			scan.addColumn(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
 			rs = table.getScanner(scan);
@@ -100,13 +130,13 @@ public class HBaseConnectionManager {
 				byte[] rohCounter = res.getValue(COLUMN_FAMILY_REPODATA, COLUMN_REPODATA_NAME);
 
 				hashtag = Bytes.toString(rohHashtag);
-				counter = Bytes.toInt(rohCounter);
+				counter = Bytes.toString(rohCounter);
 				result = new Hashtag (hashtag, counter);
 				if (!resultList.contains(result)) {
 					resultList.add(result);
 				}
 			}
-		} catch (IOException e) {
+		} catch (IOException e) {	
 			System.out.println("Exception occured in retrieving data");
 		} finally {
 			rs.close();

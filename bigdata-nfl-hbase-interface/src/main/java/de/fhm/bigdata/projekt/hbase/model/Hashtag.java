@@ -4,10 +4,10 @@ public class Hashtag {
 
 	
 	private String name;
-	private int counter;
+	private String counter;
 	
 	
-	public Hashtag(String name, int counter) {
+	public Hashtag(String name, String counter) {
 		this.name = name;
 		this.counter = counter;
 	}
@@ -19,10 +19,10 @@ public class Hashtag {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getCounter() {
+	public String getCounter() {
 		return counter;
 	}
-	public void setCounter(int counter) {
+	public void setCounter(String counter) {
 		this.counter = counter;
 	}
 	

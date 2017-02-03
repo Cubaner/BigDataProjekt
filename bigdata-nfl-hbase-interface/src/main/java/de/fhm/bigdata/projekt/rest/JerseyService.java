@@ -42,7 +42,7 @@ public class JerseyService {
 	}
 	
 	@GET
-	@Path("getTopHashtags")
+	@Path("/getTopHashtags")
 	@Produces(MediaType.APPLICATION_JSON +";charset=utf-8")
 	public ArrayList<Hashtag> getTopHashtags() {
 		HBaseConnectionManager connMan = new HBaseConnectionManager();
