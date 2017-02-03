@@ -23,7 +23,7 @@
   <datasets>
     <dataset name="tweets" frequency="${coord:hours(1)}"
              initial-instance="${initialDataset}" timezone="America/Los_Angeles">
-      <uri-template>hdfs://hadoop1:8020/user/flume/tweets/${YEAR}/${MONTH}/${DAY}/${HOUR}</uri-template>
+      <uri-template>hdfs://quickstart.cloudera:8020/user/flume/tweets/${YEAR}/${MONTH}/${DAY}/${HOUR}</uri-template>
       <done-flag></done-flag>
     </dataset>
   </datasets>
