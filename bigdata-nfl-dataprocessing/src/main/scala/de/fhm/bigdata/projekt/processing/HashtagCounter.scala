@@ -47,7 +47,7 @@ object HashtagCounter {
        val b = y.toString().split(",")(1).replace(")", "")
     	 //if (a != ""
       //var p = new Put();
-      var p = new Put(new String(a + b).getBytes()); //hashtag und timestamp?
+      var p = new Put(new String(a + b + timestamp).getBytes()); //hashtag und timestamp?
 	  p.add("hashtag_family".getBytes(), "hashtag".getBytes(), 
 						a.getBytes());
 	  p.add("hashtag_family".getBytes(), "counter".getBytes(), 
