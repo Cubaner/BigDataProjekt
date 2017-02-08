@@ -1,5 +1,5 @@
 # Readme Big Data Project 2017
-— Analyzing NFL-Twitter data by using CDH 5.8 — 
+# Analyzing NFL-Twitter data by using CDH 5.8
 
 Before you get started with the application, you will first need to install CDH 5.8. Specifically, you will need Hadoop, Flume, Oozie, and Hive. The easiest way to get the core components is to use Cloudera Manager to set up your initial environment. You can download the vm image here: (http://www.cloudera.com/downloads/quickstart_vms/5-8.html) How to set up the configuration will be explained in detail within the following steps.
 
@@ -11,15 +11,14 @@ Before you get started with the application, you will first need to install CDH 
 
 ## 2. **Configure the Flume agent**
 
-	Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be accessible by the user running the Oozie workflow.  
+	Create the HDFS directory hierarchy for the Flume sink. 
+	Make sure that it will be accessible by the user running the Oozie workflow.  
 
-	
 	$ hdfs dfs mkdir /user/cloudera/tweets
 	$ hadoop fs -chown -R flume:flume /user/flume
 	$ hadoop fs -chmod -R 770 /user/flume
 	$ sudo /etc/init.d/flume-ng-agent start
 	
-
 	Create Flume agent in Cloudera Manager Web UI
 
 	Configure the Agent and add your twitter key and token
@@ -130,7 +129,7 @@ LOCATION '/user/cloudera/tweets';
 
 ## 5. **Added Spark Resources**
 
-
+…
 
 
 ## 6. **Configure HBASE**
