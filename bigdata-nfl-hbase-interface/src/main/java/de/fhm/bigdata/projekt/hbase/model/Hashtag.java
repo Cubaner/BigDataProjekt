@@ -1,5 +1,7 @@
 package de.fhm.bigdata.projekt.hbase.model;
 
+import java.util.Comparator;
+
 public class Hashtag {
 
 	
@@ -25,5 +27,17 @@ public class Hashtag {
 	public void setCounter(String counter) {
 		this.counter = counter;
 	}
+	
+	public static Comparator<Hashtag> getHashtagByCounter()
+	{   
+	 Comparator comp = new Comparator<Hashtag>(){
+	     @Override
+	     public int compare(Hashtag h1, Hashtag h2)
+	     {
+	         return h1.counter.compareTo(h2.counter);
+	     }        
+	 };
+	 return comp;
+	}  
 	
 }

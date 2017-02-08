@@ -2,6 +2,7 @@ package de.fhm.bigdata.projekt.hbase;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -48,9 +49,9 @@ public class HBaseConnectionManager {
         try {
             config = HBaseConfiguration.create();
             config.clear();
-            config.set("hbase.zookeeper.quorum", "localhost");
+            config.set("hbase.zookeeper.quorum", "172.17.0.2");
             config.set("hbase.zookeeper.property.clientPort","2181");
-            config.set("hbase.master", "localhost:60000");
+            config.set("hbase.master", "172.17.0.2:60000");
             //HBaseConfiguration config = HBaseConfiguration.create();
             //config.set("hbase.zookeeper.quorum", "localhost");  // Here we are running zookeeper locally
             HBaseAdmin.checkHBaseAvailable(config);
@@ -103,6 +104,7 @@ public class HBaseConnectionManager {
 		} finally {
 			rs.close();
 		}
+		Collections.sort(resultList, Hashtag.getHashtagByCounter());
 		return resultList;
 	}
 

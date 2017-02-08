@@ -34,7 +34,9 @@ public class JerseyService {
 	@Produces(MediaType.APPLICATION_JSON +";charset=utf-8")
 	public ArrayList<Hashtag> getTopHashtags() {
 		HBaseConnectionManager connMan = new HBaseConnectionManager();
-			
+		
+		
+		
 		return connMan.getTopHashtags();
 		
 	}
