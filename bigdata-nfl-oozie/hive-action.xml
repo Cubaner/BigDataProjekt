@@ -18,7 +18,7 @@
 		/> <error to="kill_job" /> </action> -->
 
 
-	<!-- STEP 1 -->
+	<!-- STEP 1 hive-->
 	<action name="hive-add-partition">
 		<hive xmlns="uri:oozie:hive-action:0.2">
 			<job-tracker>${jobTracker}</job-tracker>
@@ -44,16 +44,15 @@
 		<error to="fail" />
 	</action>
 
-	<!-- STEP 2 -->
+	<!-- STEP 2 - dataprocessing -->
 	<action name="Execute-Spark-Transformation">
 		<spark xmlns="uri:oozie:spark-action:0.1">
 			<job-tracker>${jobTracker}</job-tracker>
-			<name-node>${nameNode}</name-node>			
-			<name>Spark on Oozie - WordCount</name>
-			<class>de.fhm.bigdata.projekt.processing.SparkWordCount</class>
+			<name-node>${nameNode}</name-node>		
+			<name>Spark on Oozie - HashtagCounter</name>
+			<class>de.fhm.bigdata.projekt.processing.HashtagCounter</class>
 			<jar>${workflowRoot}/lib/bigdata-nfl-dataprocessing-1.0.0-SNAPSHOT.jar</jar>						
 		</spark>
-
 		<ok to="end" />
 		<error to="fail" />
 	</action>
