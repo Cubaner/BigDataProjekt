@@ -1,4 +1,10 @@
-# 1. **Start the Flume agent**
+## 1. **Clone git project**
+
+<pre>
+$ git clone https://github.com/Cubaner/BigDataProjekt.git
+</pre>
+
+## 2. **Start the Flume agent**
 
     Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be  accessible by the user running the Oozie workflow.  
     
@@ -11,11 +17,61 @@
     
     If using Cloudera Manager, start Flume agent from Cloudera Manager Web UI.
 
-## 2. **Adjust the start time of the Oozie coordinator workflow in job.properties**
+### 3. **Adjust the start time of the Oozie coordinator workflow in job.properties**
 
-You will need to modify the `job.properties` file, and change the `jobStart`, `jobEnd`, and `initialDataset` parameters. The start and end times are in UTC, because the version of Oozie packaged in CDH4 does not yet support custom timezones for workflows. The initial dataset should be set to something before the actual start time of your job in your local time zone. Additionally, the `tzOffset` parameter should be set to the difference between the server's timezone and UTC. By default, it is set to -8, which is correct for US Pacific Time.
+Navigieren zum Github-Ordner
+<pre>
+$ cd BigDataProjekt/
+</pre>
 
-## 3. **Start the Oozie coordinator workflow**
+Erstellen der notwendigen, lokalen Ordner
+<pre>
+$ mkdir /bigdata-nfl-oozie/oozie-workflows/lib
+</pre>
+
+Kopieren der dataprocessing-SNAPSHOT.jar des processing Projektes fuer den Spark Job in "bigdata-nfl-oozie/oozie-workflows/lib/"
+<pre>
+$ cp BigDataProjekt/bigdata-nfl-dataprocessing/target/bigdata-nfl-dataprocessing-1.0.0-SNAPSHOT.jar ~/BigData/BigDataProjekt/bigdata-nfl-oozie/oozie-workflows/lib/
+</pre>
+
+
+Kopieren der hive-site.xml in den oozie-workflows Ordner
+<pre>
+$ sudo cp /etc/hive/conf/hive-site.xml ~/BigDataProjekt/bigdata-nfl-oozie/
+$ sudo chown cloudera:cloudera ~/BigDataProjekt/bigdata-nfl-oozie/hive-site.xml
+</pre>
+
+
+Kopieren des bigdata-nfl-oozie Ordners in HDFS
+<pre>
+$ hadoop fs -put ~/BigDataProjekt/bigdata-nfl-oozie /user/cloudera/bigdata-nfl-oozie
+</pre>
+
+Erstellen des oozie-workflows Verzeichnisses im HDFS
+<pre>
+hdfs dfs -mkdir /user/cloudera/oozie-workflows
+</pre>
+
+
+### Kopieren des oozie-workflows (unterordner von oozie-workflows) in HDFS Order oozieworkflows
+
+hdfs dfs  -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/oozie-workflows /user/cloudera/oozie-workflows/
+
+
+
+### Lokale Oozie-Dateien in /user/cloudera/oozie-workflows/oozie-workflows/ kopieren
+
+hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/hive-action.xml /user/cloudera/oozie-workflows/oozie-workflows/
+
+hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/hive-site.xml/user/cloudera/oozie-workflows/oozie-workflows/
+
+hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/job.properties /user/cloudera/oozie-workflows/oozie-workflows/
+
+hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/coord-app.xml /user/cloudera/oozie-workflows/oozie-workflows/
+
+hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/add_partition.q /user/cloudera/oozie-workflows/oozie-workflows/
+
+### 4. **Start the Oozie coordinator workflow**
     
     <pre>$ oozie job -oozie http://&lt;oozie-host&gt;:11000/oozie -config oozie-workflows/job.properties -run</pre>
 =======
@@ -68,7 +124,7 @@ Added bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar to
 </pre>
 
 
-### 2. **Configure Hive**
+## 2. **Configure Hive**
 
 Add Jar to /usr/lib/hive/lib/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar
 
@@ -104,18 +160,19 @@ ROW FORMAT SERDE 'de.fhm.bigdata.projekt.hive.JSONSerDe'
 LOCATION '/user/cloudera/tweets';
 </pre>
 
-### 3. **Added Spark Resources**
+## 3. **Added Spark Resources**
 
 
-### 4. **Configure HBASE**
+## 4. **Configure HBASE**
 
 <pre>
-create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
+$ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
 </pre>
 
-### 5. **Set up the tomcat**
+## 5. **Set up the tomcat**
 
 Download Tomcat 8 and added the following wars to Tomcat
+(https://tomcat.apache.org/download-80.cgi)
 
 <pre>
 --bigdata-nfl-hbase-Interface.war
@@ -123,7 +180,7 @@ Download Tomcat 8 and added the following wars to Tomcat
 </pre>
 
 
-### 6. **Set up Ozzie and started the workflow**
+## 6. **Set up Ozzie and started the workflow**
 
->>>>>>> 2388360edbc7daf06161cf4870ce2f8d0bccc78f
+
 
