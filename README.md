@@ -1,29 +1,37 @@
-# Readme Big Data Project - Analyzing NFL-Twitter data by using CDH 5.8
+# Readme Big Data Project 2017
+— Analyzing NFL-Twitter data by using CDH 5.8 — 
 
-Before you get started with the actual application, you'll first need CDH 5.8 installed. Specifically, you'll need Hadoop, Flume, Oozie, and Hive. The easiest way to get the core components is to use Cloudera Manager to set up your initial environment. You can download the vm image here: (http://www.cloudera.com/downloads/quickstart_vms/5-8.html)
+Before you get started with the application, you will first need to install CDH 5.8. Specifically, you will need Hadoop, Flume, Oozie, and Hive. The easiest way to get the core components is to use Cloudera Manager to set up your initial environment. You can download the vm image here: (http://www.cloudera.com/downloads/quickstart_vms/5-8.html) How to set up the configuration will be explained in detail within the following steps.
 
 ## 1. **Clone git project**
 
-<pre>
-$ git clone https://github.com/Cubaner/BigDataProjekt.git
-cd Bigdata projekt
-mvn clean install
-</pre>
+	<pre>
+	$ git clone https://github.com/Cubaner/BigDataProjekt.git
+	cd Bigdata projekt
+	mvn clean install
+	</pre>
 
 ## 2. **Configure the Flume agent**
 
-Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be accessible by the user running the Oozie workflow.  
+	Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be accessible by the user running the Oozie workflow.  
 
-<pre>
-$ hdfs dfs mkdir /user/cloudera/tweets
-$ hadoop fs -chown -R flume:flume /user/flume
-$ hadoop fs -chmod -R 770 /user/flume
-$ sudo /etc/init.d/flume-ng-agent start
-</pre>
+	<pre>
+	$ hdfs dfs mkdir /user/cloudera/tweets
+	$ hadoop fs -chown -R flume:flume /user/flume
+	$ hadoop fs -chmod -R 770 /user/flume
+	$ sudo /etc/init.d/flume-ng-agent start
+	</pre>
 
-If using Cloudera Manager, start Flume agent from Cloudera Manager Web UI.
+	Create Flume agent in Cloudera Manager Web UI
 
-Configure the Agent and add your twitter Key and Token
+	Configure the Agent and add your twitter key and token
+
+	- Go to the Flume Service page, click on the ‚Configuration‘ tab and select ‚View and Edit‘
+	- Select the Agent ‚Default‘
+	- Set the Agent Name property to ‚TwitterAgent’
+	- Copy the content of the TwitterAgents below.
+	- Afterwards click ‚Save Changes‘
+
 
 <pre>
 AgentName = Twitter Agent
@@ -129,7 +137,7 @@ LOCATION '/user/cloudera/tweets';
 
 ## 6. **Configure HBASE**
 
-Create the tables in HBase
+Create table hashtag in HBase
 
 <pre>
 $ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
@@ -148,6 +156,7 @@ Download Tomcat 8 and added the following wars to Tomcat
 
 ## 8. **Start the workflow coordinator**
 
+Run following command in terminal and start the workflow coordinator job
 <pre>
 oozie job -run -oozie http://quickstart.cloudera:11000/oozie -config oozie-workflows/job.properties
 </pre>
