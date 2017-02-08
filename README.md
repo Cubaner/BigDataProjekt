@@ -1,3 +1,7 @@
+# Readme Big Data Project - Analyzing NFL-Twitter data by using CDH 5.8
+
+Before you get started with the actual application, you'll first need CDH 5.8 installed. Specifically, you'll need Hadoop, Flume, Oozie, and Hive. The easiest way to get the core components is to use Cloudera Manager to set up your initial environment. You can download the vm image here: (http://www.cloudera.com/downloads/quickstart_vms/5-8.html)
+
 ## 1. **Clone git project**
 
 <pre>
@@ -54,8 +58,9 @@ TwitterAgent.channels.MemChannel.transactionCapacity = 100
 Add bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar to
 
 <pre>
-/var/lib/flume-ng/plugins.d/twitter-streaming/lib/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar
-/usr/lib/flume-ng/plugins.d/twitter-streaming/lib/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar
+$ cd /
+$ /var/lib/flume-ng/plugins.d/twitter-streaming/lib/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar
+$ /usr/lib/flume-ng/plugins.d/twitter-streaming/lib/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar
 </pre>
 
 ## 3. **Configure Oozie and create the relevant directory in HDFS**
@@ -85,8 +90,8 @@ $ hdfs dfs  -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/oozie-workflows/oo
 
 Add Jar to /usr/lib/hive/lib/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar
 
-$ <pre>
-CREATE EXTERNAL TABLE tweets (
+<pre>
+$ CREATE EXTERNAL TABLE tweets (
   id BIGINT,
   created_at STRING,
   source STRING,
@@ -123,6 +128,8 @@ LOCATION '/user/cloudera/tweets';
 
 
 ## 6. **Configure HBASE**
+
+Create the tables in HBase
 
 <pre>
 $ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
