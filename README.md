@@ -1,14 +1,13 @@
-<<<<<<< HEAD
 # 1. **Start the Flume agent**
 
-    Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be accessible by the user running the Oozie workflow.  
+    Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be  accessible by the user running the Oozie workflow.  
     
-    <pre>```
+    ```
     $ hadoop fs -mkdir /user/flume/tweets
     $ hadoop fs -chown -R flume:flume /user/flume
     $ hadoop fs -chmod -R 770 /user/flume
     $ sudo /etc/init.d/flume-ng-agent start
-    ```</pre>
+    ```
     
     If using Cloudera Manager, start Flume agent from Cloudera Manager Web UI.
 
@@ -20,7 +19,7 @@
     
     <pre>$ oozie job -oozie http://&lt;oozie-host&gt;:11000/oozie -config oozie-workflows/job.properties -run</pre>
 =======
-### 1. **Configure THE FLUME AGENT**
+### **Configure THE FLUME AGENT**
 
 Create a HDFS Folder /user/cloudera/tweets and give flume user specific rights
 
