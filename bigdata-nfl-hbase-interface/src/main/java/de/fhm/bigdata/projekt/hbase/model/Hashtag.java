@@ -6,10 +6,10 @@ public class Hashtag {
 
 	
 	private String name;
-	private String counter;
+	private Integer counter;
 	
 	
-	public Hashtag(String name, String counter) {
+	public Hashtag(String name, int counter) {
 		this.name = name;
 		this.counter = counter;
 	}
@@ -21,16 +21,16 @@ public class Hashtag {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCounter() {
+	public int getCounter() {
 		return counter;
 	}
-	public void setCounter(String counter) {
+	public void setCounter(int counter) {
 		this.counter = counter;
 	}
 	
 	public static Comparator<Hashtag> getHashtagByCounter()
 	{   
-	 Comparator comp = new Comparator<Hashtag>(){
+	 Comparator<Hashtag> comp = new Comparator<Hashtag>(){
 	     @Override
 	     public int compare(Hashtag h1, Hashtag h2)
 	     {

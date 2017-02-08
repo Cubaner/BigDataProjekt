@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,29 +23,31 @@ public class JerseyService {
 			"dd.MM.yyyy");
 
 	@GET
-	@Path("/getTeamstatictics")
+	@Path("/getTeamstatistics")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public ArrayList<NFLTeam> getAllTeamStatistics() {
 
-		return createTestTeams();
+		ArrayList<NFLTeam> resultList = createTestTeams();
+		Collections.sort(resultList, NFLTeam.getNFLTeamByRank());
+		
+		return resultList;
 	}
 	
 	@GET
 	@Path("/getTopHashtags")
 	@Produces(MediaType.APPLICATION_JSON +";charset=utf-8")
 	public ArrayList<Hashtag> getTopHashtags() {
-		HBaseConnectionManager connMan = new HBaseConnectionManager();
-		
-		
-		
+		HBaseConnectionManager connMan = new HBaseConnectionManager();	
 		return connMan.getTopHashtags();
 		
 	}
 	
 	private ArrayList<NFLTeam> createTestTeams() {
 		ArrayList<NFLTeam> test = new ArrayList<NFLTeam>();
-		test.add(new NFLTeam("GreenBayPackers", 1));
-		test.add(new NFLTeam("ArizonaCardinals", 2));
+		test.add(new NFLTeam("GreenBayPackers", 1, 1, null, null, null));
+		test.add(new NFLTeam("ArizonaCardinals", 2, 1, null, null, null));
+		test.add(new NFLTeam("Patriots", 7, 13, null, null, null));
+		test.add(new NFLTeam("Falcons", 2, 8, null, null, null));
 		
 		return test;		
 	}

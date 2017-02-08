@@ -3,6 +3,7 @@
 
 <head>
 
+<<<<<<< HEAD
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,6 +32,37 @@
 								tr.append("<td>" + json[i].counter + "</td>");
 								$('table').append(tr);
 							}
+=======
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>BigData-Projekt</title>
+	
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" href="css/dashboard.css">
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.css">
+	<script type="text/javascript" language="javascript"
+		src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script>
+		$(document)
+				.ready(
+						function() {
+							var restAPI = "http://localhost:8081/bigdata-nfl-hbase-interface/api/nfl/getTopHashtags";
+
+							$.getJSON(restAPI, function(json) {
+								var tr;
+								for (var i = 0; i < json.length; i++) {
+									tr = $('<tr/>');
+									tr.append("<td>" + json[i].name + "</td>");
+									tr.append("<td>" + json[i].counter + "</td>");
+									$('table').append(tr);
+								}
+							});
+>>>>>>> cc2964213b7bba0bb37a6876ce519b746e8ee7d4
 						});
 					});
 </script>
