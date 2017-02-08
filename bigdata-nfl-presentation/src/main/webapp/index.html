@@ -21,14 +21,15 @@
 		$(document)
 				.ready(
 						function() {
-							var restAPI = "http://localhost:8080/bigdata-nfl-hbase-interface/api/nfl/getTeamstatictics";
-	
+							var restAPI = "http://localhost:8081/bigdata-nfl-hbase-interface/api/nfl/getTopHashtags
+";
+
 							$.getJSON(restAPI, function(json) {
 								var tr;
 								for (var i = 0; i < json.length; i++) {
 									tr = $('<tr/>');
-									tr.append("<td>" + json[i].teamName + "</td>");
-									tr.append("<td>" + json[i].rank + "</td>");
+									tr.append("<td>" + json[i].name + "</td>");
+									tr.append("<td>" + json[i].counter + "</td>");
 									$('table').append(tr);
 								}
 							});
@@ -81,8 +82,8 @@
 					<table id="resultsTable" class="table table-striped">
 						<thead>
 							<tr>
-								<th>Team Name</th>
-								<th>Rank</th>
+								<th>Name</th>
+								<th>Counter</th>
 							</tr>
 
 						</thead>
