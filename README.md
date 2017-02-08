@@ -8,7 +8,7 @@ mvn clean install
 
 ## 2. **Configure the Flume agent**
 
-Create a HDFS Folder /user/cloudera/tweets and give flume user specific rights
+Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be accessible by the user running the Oozie workflow.  
 
 <pre>
 $ hdfs dfs mkdir /user/cloudera/tweets
@@ -19,7 +19,7 @@ $ sudo /etc/init.d/flume-ng-agent start
 
 If using Cloudera Manager, start Flume agent from Cloudera Manager Web UI.
 
-Configure the agent the Agent and add your twitter Key and Token
+Configure the Agent and add your twitter Key and Token
 
 <pre>
 AgentName = Twitter Agent
@@ -58,53 +58,26 @@ Add bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar to
 /usr/lib/flume-ng/plugins.d/twitter-streaming/lib/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar
 </pre>
 
-Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be  accessible by the user running the Oozie workflow.  
+## 3. **Configure Oozie and create the relevant directory in HDFS**
 
-## 3. **Configure Oozie and create directory in HDFS**
-
-Erstellen der notwendigen, lokalen Oozie Ordner im HDFS
-<pre>
-$ mkdir /bigdata-nfl-oozie/oozie-workflows/lib
-</pre>
-
-Kopieren der dataprocessing-SNAPSHOT.jar des processing Projektes fuer den Spark Job in "bigdata-nfl-oozie/oozie-workflows/lib/"
+Copy the dataprocessing-SNAPSHOT.jar (@ ~ you have to insert your own directory path)
 <pre>
 $ cp BigDataProjekt/bigdata-nfl-dataprocessing/target/bigdata-nfl-dataprocessing-1.0.0-SNAPSHOT.jar ~/BigData/BigDataProjekt/bigdata-nfl-oozie/oozie-workflows/lib/
 </pre>
 
-Kopieren der hive-site.xml in den oozie-workflows Ordner
+Copy des bigdata-nfl-oozie Ordners in HDFS
 <pre>
-$ sudo cp /etc/hive/conf/hive-site.xml ~/BigDataProjekt/bigdata-nfl-oozie/
-$ sudo chown cloudera:cloudera ~/BigDataProjekt/bigdata-nfl-oozie/hive-site.xml
+$ hdfs dfs -put ~/BigDataProjekt/bigdata-nfl-oozie /user/cloudera/bigdata-nfl-oozie
 </pre>
 
-Kopieren des bigdata-nfl-oozie Ordners in HDFS
+Create oozie-workflows directory in HDFS
 <pre>
-$ hadoop fs -put ~/BigDataProjekt/bigdata-nfl-oozie /user/cloudera/bigdata-nfl-oozie
+$ hdfs dfs -mkdir /user/cloudera/oozie-workflows
 </pre>
 
-Erstellen des oozie-workflows Verzeichnisses im HDFS
+Copy oozie-workflows (directory below with same name and necessary oozie data) into HDFS folder oozieworkflows
 <pre>
-hdfs dfs -mkdir /user/cloudera/oozie-workflows
-</pre>
-
-Kopieren des oozie-workflows (unterordner von oozie-workflows) in HDFS Order oozieworkflows
-<pre>
-hdfs dfs  -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/oozie-workflows /user/cloudera/oozie-workflows/
-</pre>
-
-
-Lokale Oozie-Dateien in /user/cloudera/oozie-workflows/oozie-workflows/ kopieren
-<pre>
-hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/hive-action.xml /user/cloudera/oozie-workflows/oozie-workflows/
-
-hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/hive-site.xml/user/cloudera/oozie-workflows/oozie-workflows/
-
-hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/job.properties /user/cloudera/oozie-workflows/oozie-workflows/
-
-hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/coord-app.xml /user/cloudera/oozie-workflows/oozie-workflows/
-
-hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/add_partition.q /user/cloudera/oozie-workflows/oozie-workflows/
+$ hdfs dfs  -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/oozie-workflows/oozie-workflows /user/cloudera/oozie-workflows/
 </pre>
 
 
@@ -112,7 +85,7 @@ hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/add_partition.q /user
 
 Add Jar to /usr/lib/hive/lib/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar
 
-<pre>
+$ <pre>
 CREATE EXTERNAL TABLE tweets (
   id BIGINT,
   created_at STRING,
