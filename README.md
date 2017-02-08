@@ -51,7 +51,7 @@ TwitterAgent.channels.MemChannel.capacity = 10000
 TwitterAgent.channels.MemChannel.transactionCapacity = 100
 </pre>
 
-Added bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar to
+Add bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar to
 
 <pre>
 /var/lib/flume-ng/plugins.d/twitter-streaming/lib/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar
@@ -60,7 +60,7 @@ Added bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar to
 
 Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be  accessible by the user running the Oozie workflow.  
 
-### 3. **Configure Oozie and create directory in HDFS**
+## 3. **Configure Oozie and create directory in HDFS**
 
 Erstellen der notwendigen, lokalen Oozie Ordner im HDFS
 <pre>
@@ -94,7 +94,7 @@ hdfs dfs  -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/oozie-workflows /use
 </pre>
 
 
-### Lokale Oozie-Dateien in /user/cloudera/oozie-workflows/oozie-workflows/ kopieren
+Lokale Oozie-Dateien in /user/cloudera/oozie-workflows/oozie-workflows/ kopieren
 <pre>
 hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/hive-action.xml /user/cloudera/oozie-workflows/oozie-workflows/
 
@@ -107,13 +107,8 @@ hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/coord-app.xml /user/c
 hdfs dfs -copyFromLocal ~/BigDataProjekt/bigdata-nfl-oozie/add_partition.q /user/cloudera/oozie-workflows/oozie-workflows/
 </pre>
 
-### 4. **Start the Oozie coordinator workflow**
-    
-<pre>
-$ oozie job -oozie http://&lt;oozie-host&gt;:11000/oozie -config oozie-workflows/job.properties -run
-</pre>
 
-## 2. **Configure Hive**
+## 4. **Configure Hive**
 
 Add Jar to /usr/lib/hive/lib/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar
 
@@ -149,16 +144,18 @@ ROW FORMAT SERDE 'de.fhm.bigdata.projekt.hive.JSONSerDe'
 LOCATION '/user/cloudera/tweets';
 </pre>
 
-## 3. **Added Spark Resources**
+## 5. **Added Spark Resources**
 
 
-## 4. **Configure HBASE**
+
+
+## 6. **Configure HBASE**
 
 <pre>
 $ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
 </pre>
 
-## 5. **Set up the tomcat**
+## 7. **Set up the tomcat**
 
 Download Tomcat 8 and added the following wars to Tomcat
 (https://tomcat.apache.org/download-80.cgi)
@@ -169,7 +166,12 @@ Download Tomcat 8 and added the following wars to Tomcat
 </pre>
 
 
-## 6. **Set up Ozzie and started the workflow**
+## 8. **Start the workflow coordinator**
+
+<pre>
+oozie job -run -oozie http://quickstart.cloudera:11000/oozie -config oozie-workflows/job.properties
+</pre>
+
 
 
 
