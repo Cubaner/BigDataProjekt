@@ -5,22 +5,20 @@ Before you get started with the application, you will first need to install CDH 
 
 ## 1. **Clone git project**
 
-	<pre>
 	$ git clone https://github.com/Cubaner/BigDataProjekt.git
 	cd Bigdata projekt
 	mvn clean install
-	</pre>
 
 ## 2. **Configure the Flume agent**
 
 	Create the HDFS directory hierarchy for the Flume sink. Make sure that it will be accessible by the user running the Oozie workflow.  
 
-	<pre>
+	
 	$ hdfs dfs mkdir /user/cloudera/tweets
 	$ hadoop fs -chown -R flume:flume /user/flume
 	$ hadoop fs -chmod -R 770 /user/flume
 	$ sudo /etc/init.d/flume-ng-agent start
-	</pre>
+	
 
 	Create Flume agent in Cloudera Manager Web UI
 
