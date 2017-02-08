@@ -3,6 +3,36 @@
 
 <head>
 
+<<<<<<< HEAD
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>BigData-Projekt</title>
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<!-- Custom styles for this template -->
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.css">
+<script type="text/javascript" language="javascript"
+	src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+	$(document)
+			.ready(
+					function() {
+						var restAPI = "http://localhost:8081/bigdata-nfl-hbase-interface/api/nfl/getTopHashtags";
+
+						$.getJSON(restAPI, function(json) {
+							var tr;
+							for (var i = 0; i < json.length; i++) {
+								tr = $('<tr/>');
+								tr.append("<td>" + json[i].name + "</td>");
+								tr.append("<td>" + json[i].counter + "</td>");
+								$('table').append(tr);
+							}
+=======
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,32 +51,53 @@
 		$(document)
 				.ready(
 						function() {
-							var restAPI = "http://localhost:8080/bigdata-nfl-hbase-interface/api/nfl/getTeamstatictics";
-	
+							var restAPI = "http://localhost:8081/bigdata-nfl-hbase-interface/api/nfl/getTopHashtags";
+
 							$.getJSON(restAPI, function(json) {
 								var tr;
 								for (var i = 0; i < json.length; i++) {
 									tr = $('<tr/>');
-									tr.append("<td>" + json[i].teamName + "</td>");
-									tr.append("<td>" + json[i].rank + "</td>");
+									tr.append("<td>" + json[i].name + "</td>");
+									tr.append("<td>" + json[i].counter + "</td>");
 									$('table').append(tr);
 								}
 							});
+>>>>>>> cc2964213b7bba0bb37a6876ce519b746e8ee7d4
 						});
-	</script>
-	<style>
-	.bar {
-		fill: steelblue;
-	}
-	
-	.bar:hover {
-		fill: brown;
-	}
-	
-	.axis--x path {
-		display: none;
-	}
-	</style>
+					});
+</script>
+<style>
+body {
+	margin: 15px;
+	background-color: #F1F3F3
+}
+
+.bar {
+	fill: #6F257F;
+}
+
+.axis path, .axis line {
+	fill: none;
+	stroke: #D4D8DA;
+	stroke-width: 1px;
+	shape-rendering: crispEdges;
+}
+
+.x path {
+	display: none;
+}
+
+.toolTip {
+	position: absolute;
+	display: none;
+	min-width: 80px;
+	height: auto;
+	background: none repeat scroll 0 0 #ffffff;
+	border: 1px solid #6F257F;
+	padding: 14px;
+	text-align: center;
+}
+</style>
 </head>
 
 <body>
@@ -81,8 +132,8 @@
 					<table id="resultsTable" class="table table-striped">
 						<thead>
 							<tr>
-								<th>Team Name</th>
-								<th>Rank</th>
+								<th>Name</th>
+								<th>Counter</th>
 							</tr>
 
 						</thead>
@@ -108,48 +159,80 @@
 			top : 20,
 			right : 20,
 			bottom : 30,
-			left : 40
+			left : 80
 		}, width = +svg.attr("width") - margin.left - margin.right, height = +svg
 				.attr("height")
 				- margin.top - margin.bottom;
 
-		var x = d3.scaleBand().rangeRound([ 0, width ]).padding(0.1), y = d3
-				.scaleLinear().rangeRound([ height, 0 ]);
+		var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
+		var x = d3.scaleLinear().range([ 0, width ]);
+		var y = d3.scaleBand().range([ height, 0 ]);
 
 		var g = svg.append("g").attr("transform",
 				"translate(" + margin.left + "," + margin.top + ")");
 
-		d3.tsv("data/data.tsv", function(d) {
-			d.frequency = +d.frequency;
-			return d;
-		}, function(error, data) {
-			if (error)
-				throw error;
+		d3
+				.json(
+						"http://localhost:8081/bigdata-nfl-hbase-interface/api/nfl/getTopHashtags",
+						function(error, data) {
+							if (error)
+								throw error;
 
-			x.domain(data.map(function(d) {
-				return d.letter;
-			}));
-			y.domain([ 0, d3.max(data, function(d) {
-				return d.frequency;
-			}) ]);
+							data.sort(function(a, b) {
+								return a.counter - b.counter;
+							});
 
-			g.append("g").attr("class", "axis axis--x").attr("transform",
-					"translate(0," + height + ")").call(d3.axisBottom(x));
+							x.domain([ 0, d3.max(data, function(d) {
+								return d.counter;
+							}) ]);
+							y.domain(data.map(function(d) {
+								return d.name;
+							})).padding(0.1);
 
-			g.append("g").attr("class", "axis axis--y").call(
-					d3.axisLeft(y).ticks(10, "%")).append("text").attr(
-					"transform", "rotate(-90)").attr("y", 6).attr("dy",
-					"0.71em").attr("text-anchor", "end").text("Frequency");
+							g
+									.append("g")
+									.attr("class", "x axis")
+									.attr("transform",
+											"translate(0," + height + ")")
+									.call(
+											d3
+													.axisBottom(x)
+													.ticks(100)
+													.tickFormat(
+															function(d) {
+																return parseInt(d / 1000);
+															}).tickSizeInner(
+															[ -height ]));
 
-			g.selectAll(".bar").data(data).enter().append("rect").attr("class",
-					"bar").attr("x", function(d) {
-				return x(d.letter);
-			}).attr("y", function(d) {
-				return y(d.frequency);
-			}).attr("width", x.bandwidth()).attr("height", function(d) {
-				return height - y(d.frequency);
-			});
-		});
+							g.append("g").attr("class", "y axis").call(
+									d3.axisLeft(y));
+
+							g.selectAll(".bar").data(data).enter().append(
+									"rect").attr("class", "bar").attr("x", 0)
+									.attr("height", y.bandwidth()).attr("y",
+											function(d) {
+												return y(d.name);
+											}).attr("width", function(d) {
+										return x(d.counter);
+									}).on(
+											"mousemove",
+											function(d) {
+												tooltip.style(
+														"left",
+														d3.event.pageX - 50
+																+ "px").style(
+														"top",
+														d3.event.pageY - 70
+																+ "px").style(
+														"display",
+														"inline-block").html(
+														(d.name) + "<br>" + "£"
+																+ (d.counter));
+											}).on("mouseout", function(d) {
+										tooltip.style("display", "none");
+									});
+						});
 	</script>
 </body>
 

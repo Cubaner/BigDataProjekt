@@ -11,15 +11,17 @@ import org.apache.hadoop.hbase.client.HTable;
 object HashtagCounter {
   def main(args: Array[String]) {
 
-    val sc = new SparkContext(new SparkConf().setAppName("Spark Count"))
+    val sc = new SparkContext(new SparkConf().setAppName("Hashtag Counter"))
 
-
+    val threshold = args(1).toInt
+    var timestamp = args(0).toString
+    
     val hiveContext = new HiveContext(sc)
     //val df = sqlContext.table("default.tweets")
 
     import hiveContext.implicits._
     import hiveContext.sql
-    hiveContext.sql("ADD JAR /home/cloudera/BigData/BigDataProjekt/bigdata-nfl-hive/target/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar")
+    hiveContext.sql("ADD JAR /usr/lib/hive/lib/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar")
     
     val trimmed_tweets = hiveContext.sql("select entities.hashtags from tweets").map(row => row.getList(0).toString()).filter(_.nonEmpty).flatMap(_.split(","))
     
@@ -29,7 +31,7 @@ object HashtagCounter {
     trimmed_tweets3.map(t => "Tweettext: " + t).collect().foreach(println)
     val wordCounts = trimmed_tweets3.map((_, 1)).reduceByKey(_ + _)
     
-    val filtered = wordCounts.filter(_._2 >= 3)
+    val filtered = wordCounts.filter(_._2 >= threshold)
     
     //Die Map durchgehend in HBASE speichern
     
@@ -41,17 +43,16 @@ object HashtagCounter {
     //put data into table
     val myTable = new HTable(conf, tableName);
         filtered.collect().foreach(y => {
-       val a = y.toString().split(",")(0)
-       val b = y.toString().split(",")(1)
+       val a = y.toString().split(",")(0).replace("(", "")
+       val b = y.toString().split(",")(1).replace(")", "")
     	 //if (a != ""
       //var p = new Put();
-      var p = new Put(new String(a + b).getBytes()); //hashtag und timestamp?
+      var p = new Put(new String(a + b + timestamp).getBytes()); //hashtag und timestamp?
 	  p.add("hashtag_family".getBytes(), "hashtag".getBytes(), 
 						a.getBytes());
 	  p.add("hashtag_family".getBytes(), "counter".getBytes(), 
 						b.getBytes());
-		p.add("hashtag_family".getBytes(), "timestamp".getBytes(), new String(
-						"value ").getBytes());
+		p.add("hashtag_family".getBytes(), "timestamp".getBytes(), timestamp.getBytes());
 	  myTable.put(p);
         } )
 	myTable.flushCommits();

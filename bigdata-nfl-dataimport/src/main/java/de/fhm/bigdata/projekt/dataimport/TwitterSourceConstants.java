@@ -32,4 +32,5 @@ public class TwitterSourceConstants {
   
   public static final String PROXY_HOST = "proxyHost";
   public static final String PROXY_PORT = "proxyPort";
+  public static final String PROXY_ENABLED = "enableProxy";
 }

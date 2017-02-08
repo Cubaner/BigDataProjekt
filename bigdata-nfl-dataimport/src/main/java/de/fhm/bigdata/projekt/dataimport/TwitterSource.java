@@ -59,6 +59,7 @@ public class TwitterSource extends AbstractSource
   private String accessToken;
   private String accessTokenSecret;
 
+  private Boolean proxyEnabled;
   private String proxyHost;
   private String proxyPort;
   
@@ -79,8 +80,8 @@ public class TwitterSource extends AbstractSource
     accessToken = context.getString(TwitterSourceConstants.ACCESS_TOKEN_KEY);
     accessTokenSecret = context.getString(TwitterSourceConstants.ACCESS_TOKEN_SECRET_KEY);
     
+    proxyEnabled = context.getBoolean(TwitterSourceConstants.PROXY_ENABLED);
     proxyHost = context.getString(TwitterSourceConstants.PROXY_HOST);
-
     proxyPort = context.getString(TwitterSourceConstants.PROXY_PORT);
 
     String keywordString = context.getString(TwitterSourceConstants.KEYWORDS_KEY, "");
@@ -101,8 +102,10 @@ public class TwitterSource extends AbstractSource
     cb.setJSONStoreEnabled(true);
     cb.setIncludeEntitiesEnabled(true);
     
-    cb.setHttpProxyHost("10.60.17.102");
-    cb.setHttpProxyPort(8080);//port
+    if (proxyEnabled) {
+    	cb.setHttpProxyHost("10.60.17.102");
+    	cb.setHttpProxyPort(8080);//port
+    }
 
     twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
   }
