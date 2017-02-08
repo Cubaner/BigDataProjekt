@@ -30,7 +30,7 @@ public class Hashtag {
 	
 	public static Comparator<Hashtag> getHashtagByCounter()
 	{   
-	 Comparator comp = new Comparator<Hashtag>(){
+	 Comparator<Hashtag> comp = new Comparator<Hashtag>(){
 	     @Override
 	     public int compare(Hashtag h1, Hashtag h2)
 	     {

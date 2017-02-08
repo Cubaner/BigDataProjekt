@@ -1,9 +1,11 @@
 package de.fhm.bigdata.projekt.hbase.model;
 
+import java.util.Comparator;
+
 public class NFLTeam {
 
 	private String teamName;
-	private int rank;
+	private Integer rank;
 	private int id;
 	private String division;
 	private String forecast;
@@ -77,6 +79,17 @@ public class NFLTeam {
 		this.synonyms = synonyms;
 	}
 	
+	public static Comparator<NFLTeam> getNFLTeamByRank()
+	{   
+	 Comparator<NFLTeam> comp = new Comparator<NFLTeam>(){
+	     @Override
+	     public int compare(NFLTeam t1, NFLTeam t2)
+	     {
+	         return t1.rank.compareTo(t2.rank);
+	     }        
+	 };
+	 return comp;
+	}  
 	
 	
 }
