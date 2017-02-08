@@ -1,5 +1,5 @@
 # Readme Big Data Project 2017
-# Analyzing NFL-Twitter data by using CDH 5.8
+## Analyzing NFL-Twitter data by using CDH 5.8
 
 Before you get started with the application, you will first need to install CDH 5.8. Specifically, you will need Hadoop, Flume, Oozie, and Hive. The easiest way to get the core components is to use Cloudera Manager to set up your initial environment. You can download the vm image here: (http://www.cloudera.com/downloads/quickstart_vms/5-8.html) How to set up the configuration will be explained in detail within the following steps.
 
