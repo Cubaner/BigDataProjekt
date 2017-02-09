@@ -111,26 +111,28 @@ Before you get started with the application, you will first need to install CDH 
 	LOCATION '/user/cloudera/tweets';
 	</pre>
 
-## 5. **Configure HBASE**
+## 5. Configure HBASE
 
 	Create table hashtag in HBase
 
   ... erweitern der zu erstellenden Tabelle?
 	<pre>
-	$ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
+$ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
 	</pre>
 
-## 6. **Set up the tomcat**
+## 6. Set up the tomcat
 
 	Download and unzip Tomcat 8
 	(https://tomcat.apache.org/download-80.cgi)
 
 	Copy the downloaded folder to /opt/
+
 	<pre>
 	$ cp /home/cloudera/Downloads/apache-tomcat-8.5.11.tar.gz /opt/
 	</pre>
 
 	Add the following wars to Tomcat directory in /opt/
+
 	<pre>
 	$ cp ~/Bigdata/bigdata-nfl-hbase-interface/target/bigdata-nfl-hbase-Interface.war /opt/apache-tomcat-8.5.11/webapps/
 	$ cp ~/Bigdata/bigdata-nfl-...WO SOLL DIE SEIN?.../bigdata-nfl-presentation.war /opt/apache-tomcat-8.5.11/webapps/
