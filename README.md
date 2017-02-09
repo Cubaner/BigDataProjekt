@@ -23,10 +23,14 @@ Start HDFS-Service in the Cloudera Manager Web UI
 Create the HDFS directory hierarchy for the Flume sink.
 Make sure that it will be accessible by the user running the Oozie workflow to start the application.  
 ```
+$ su -l
+```
+
+```
 $ hdfs dfs -mkdir /user/cloudera/tweets
 $ hadoop fs -chown -R cloudera:cloudera /user/cloudera
 $ hadoop fs -chmod -R 777 /user/cloudera
-$ sudo /etc/init.d/flume-ng-agent start
+$ /etc/init.d/flume-ng-agent start
 ```
 Create the Flume agent in Cloudera Manager Web UI
 Configure the Agent and add your twitter key and token
@@ -68,30 +72,33 @@ TwitterAgent.sinks.HDFS.hdfs.rollInterval = 600
 TwitterAgent.channels.MemChannel.type = memory
 TwitterAgent.channels.MemChannel.capacity = 10000
 TwitterAgent.channels.MemChannel.transactionCapacity = 100
+
+#Proxy Settings if necessary
+TwitterAgent.sources.Twitter.enableProxy = false
+TwitterAgent.sources.Twitter.proxyHost = 10.60.17.102
+TwitterAgent.sources.Twitter.proxyPort = 8080
 ```
 - Click `Save Changes`
 
 Add the dataimport.jar to the Flume classpath
 Create first the directory
 ```
-$ sudo mkdir /var/lib/flume-ng/plugins.d
-$ sudo mkdir /var/lib/flume-ng/plugins.d/twitter-streaming
-$ sudo mkdir /var/lib/flume-ng/plugins.d/twitter-streaming/lib
+$ mkdir /var/lib/flume-ng/plugins.d
+$ mkdir /var/lib/flume-ng/plugins.d/twitter-streaming
+$ mkdir /var/lib/flume-ng/plugins.d/twitter-streaming/lib
 
-$ sudo mkdir /usr/lib/flume-ng/plugins.d
-$ sudo mkdir /usr/lib/flume-ng/plugins.d/twitter-streaming
-$ sudo mkdir /usr/lib/flume-ng/plugins.d/twitter-streaming/lib
+$ mkdir /usr/lib/flume-ng/plugins.d
+$ mkdir /usr/lib/flume-ng/plugins.d/twitter-streaming
+$ mkdir /usr/lib/flume-ng/plugins.d/twitter-streaming/lib
 
-$ sudo cp ~/BigDataProjekt/bigdata-nfl-dataimport/target/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar /var/lib/flume-ng/plugins.d/twitter-streaming/lib/
-$ sudo cp ~/BigDataProjekt/bigdata-nfl-dataimport/target/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar /usr/lib/flume-ng/plugins.d/twitter-streaming/lib/
+$ cp ~/BigDataProjekt/bigdata-nfl-dataimport/target/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar /var/lib/flume-ng/plugins.d/twitter-streaming/lib/
+$ cp ~/BigDataProjekt/bigdata-nfl-dataimport/target/bigdata-nfl-dataimport-1.0.0-SNAPSHOT.jar /usr/lib/flume-ng/plugins.d/twitter-streaming/lib/
 ```
 
 ## 3. **Configure Oozie and create the relevant directory in HDFS**
 
 Ensures the accessibility to copy files
-```
-$ su -l
-```
+
 Copy the dataprocessing-SNAPSHOT.jar into oozie-workflows/lib/ (@ ~ you have to insert your own directory path)
 If asking to overwrite, say yes!
 ```
@@ -161,6 +168,7 @@ LOCATION '/user/cloudera/tweets';
 Execute the following command in HBase Shell:
 ```
 $ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
+$ create ""teams"", "team", "rank', "devision", "synonyms"
 ```
 
 ## 6. **Start the workflow coordinator**
