@@ -10,6 +10,7 @@
   <groupId>de.fhm.bigdata.projekt</groupId>
   <artifactId>bigdata-nfl-assembly</artifactId>
   <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
   
 	<dependencyManagement>
 		<dependencies>
@@ -25,20 +26,14 @@
 
   <build>
     <plugins>
-        <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.0.0</version>
-            <configuration>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                    <phase>package</phase> <!-- bind to the packaging phase -->
-                    <goals>
-                        <goal>single</goal>
-                    </goals>
-                </execution>
-            </executions>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <descriptors>
+            <descriptor>src/assembly/assembly.xml</descriptor>
+          </descriptors>
+		 </configuration>
         </plugin>
     </plugins>
   </build>
@@ -49,7 +44,7 @@
             <groupId>de.fhm.bigdata.projekt</groupId>
             <artifactId>bigdata-nfl-dataprocessing</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-            <type>jar</type>
+            <classifier>standard</classifier>
         </dependency>
         
     </dependencies>
