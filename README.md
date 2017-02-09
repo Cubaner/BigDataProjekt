@@ -155,50 +155,43 @@ Column Families: `hashtag_family`
 $ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
 ```
 
-## 6. **Set up the tomcat**
-
-Download and unzip Tomcat 8
-(https://tomcat.apache.org/download-80.cgi)
-
-Copy the downloaded folder to /opt/
-```
-$ cp /home/cloudera/Downloads/apache-tomcat-8.5.11.tar.gz /opt/
-```
-Add the following wars to Tomcat directory in /opt/
-```
-$ cp ~/Bigdata/bigdata-nfl-hbase-interface/target/bigdata-nfl-hbase-Interface.war /opt/apache-tomcat-8.5.11/webapps/
-$ cp ~/Bigdata/bigdata-nfl-presentation/target/bigdata-nfl-presentation.war /opt/apache-tomcat-8.5.11/webapps/
-```
-Configure the Apache Port in the configuration file.  ????
-Browse to:
-```
-$ cd /
-$ cd/opt/apache-tomcat-8.0.32/conf/
-```
-Open the server.xml and add:
-```
-$ <Connector port="8081" protocol="HTTP/1.1"
-	  				 connectionTimeout="20000"
-             redirectPort="8443" />
-```
-Deploy the tomcat with ???
-```
-????
-```
-Start the tomcat with sudo command
-```
-$ sudo bash /bin/catalina.sh start
-```
-Tomcat available by using following uri
-```
-$ http://localhost:8090/...
-```
-
-## 7. **Start the workflow coordinator**
+## 6. **Start the workflow coordinator**
 
 Navigate to the project and enter the folder bigdata-nfl-oozie.
 Afterwards run the following command in terminal and start the workflow coordinator job
 ```
 $ ~/BigDataProjekt/bigdata-nfl-oozie/
 $ oozie job -run -oozie http://quickstart.cloudera:11000/oozie -config job.properties
+```
+
+## 7. **Set up the tomcat**
+
+Download and unzip Tomcat 8
+(https://tomcat.apache.org/download-80.cgi#8.0.41)
+
+Copy unziped folder to /opt/
+
+Add the following wars to Tomcat directory in /opt/
+```
+$ cp ~/Bigdata/bigdata-nfl-hbase-interface/target/bigdata-nfl-hbase-Interface.war /opt/apache-tomcat-8.0.41/webapps/
+$ cp ~/Bigdata/bigdata-nfl-presentation/target/bigdata-nfl-presentation.war /opt/apache-tomcat-8.0.41/webapps/
+```
+Configure the Apache Port in the configuration file.
+Browse to:
+```
+$ /opt/apache-tomcat-8.0.32/conf/
+```
+Open the server.xml and change port to 8081:
+```
+$ <Connector port="8081" protocol="HTTP/1.1"
+	  				 connectionTimeout="20000"
+             redirectPort="8443" />
+```
+Start the tomcat with sudo command
+```
+$ sudo bash /bin/catalina.sh start
+```
+Website available by using following uri
+```
+$ http://localhost:8081/bigdata-nfl-presentation
 ```
