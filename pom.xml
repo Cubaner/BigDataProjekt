@@ -14,13 +14,14 @@
     </properties>
 
     <modules>
-    	<module>bigdata-nfl-versions</module>
+    	<module>bigdata-nfl-versions</module> <!-- Have to be the first module-->
         <module>bigdata-nfl-dataimport</module>
         <module>bigdata-nfl-dataprocessing</module>
         <module>bigdata-nfl-presentation</module>
         <module>bigdata-nfl-hive</module>
         <module>bigdata-nfl-oozie</module>
         <module>bigdata-nfl-hbase-interface</module>
+        <module>bigdata-nfl-assembly</module> <!-- Have to be the last module-->
     </modules>
     <repositories>
         <repository>
@@ -36,7 +37,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5</version>
                 <configuration>
-                    <source>1.7</source>
+                    <source>1.7</source> <!-- Java 1.7 because cloudera is running on version 1.7 -->
                     <target>1.7</target>
                 </configuration>
             </plugin>

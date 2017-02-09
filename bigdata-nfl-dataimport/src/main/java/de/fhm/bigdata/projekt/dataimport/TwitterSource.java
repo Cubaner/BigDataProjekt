@@ -61,7 +61,7 @@ public class TwitterSource extends AbstractSource
 
   private Boolean proxyEnabled;
   private String proxyHost;
-  private String proxyPort;
+  private int proxyPort;
   
   private String[] keywords;
 
@@ -82,7 +82,7 @@ public class TwitterSource extends AbstractSource
     
     proxyEnabled = context.getBoolean(TwitterSourceConstants.PROXY_ENABLED);
     proxyHost = context.getString(TwitterSourceConstants.PROXY_HOST);
-    proxyPort = context.getString(TwitterSourceConstants.PROXY_PORT);
+    proxyPort = context.getInteger(TwitterSourceConstants.PROXY_PORT);
 
     String keywordString = context.getString(TwitterSourceConstants.KEYWORDS_KEY, "");
     if (keywordString.trim().length() == 0) {
@@ -103,8 +103,8 @@ public class TwitterSource extends AbstractSource
     cb.setIncludeEntitiesEnabled(true);
     
     if (proxyEnabled) {
-    	cb.setHttpProxyHost("10.60.17.102");
-    	cb.setHttpProxyPort(8080);//port
+    	cb.setHttpProxyHost(proxyHost);
+    	cb.setHttpProxyPort(proxyPort);//port
     }
 
     twitterStream = new TwitterStreamFactory(cb.build()).getInstance();

@@ -33,19 +33,15 @@ public class HBaseConnectionManager {
 
 	private static Configuration config;
 	
-	private static String TABLE_TEST = "test2";
 	private static String TABLE_TEAMS = "teams";
 	private static String TABLE_HASHTAGS = "hashtags";
-	
-	private static final byte[] COLUMN_FAMILY = Bytes.toBytes("");
-	private static final byte[] COLUMN_A = Bytes.toBytes("");
 	
 	private static final byte[] COLUMN_FAMILY_HASHTAGS = Bytes.toBytes("hashtag_family");
 	private static final byte[] COLUMN_HASHTAGS_NAME = Bytes.toBytes("hashtag");
 	private static final byte[] COLUMN_HASHTAGS_COUNTER = Bytes.toBytes("counter");
 	private static final byte[] COLUMN_HASHTAGS_TIMESTAMP = Bytes.toBytes("timestamp");
 	
-	private static final byte[] COLUMN_FAMILY_TEAMS = Bytes.toBytes("hashtag_teams");
+	private static final byte[] COLUMN_FAMILY_TEAMS = Bytes.toBytes("team_family");
 	private static final byte[] COLUMN_TEAMS_NAME = Bytes.toBytes("name");
 	private static final byte[] COLUMN_TEAMS_RANK = Bytes.toBytes("rank");
 	private static final byte[] COLUMN_TEAMS_ID = Bytes.toBytes("id");
@@ -140,6 +136,7 @@ public class HBaseConnectionManager {
 		ResultScanner rs = null;
 		Result res = null;
 		String hashtag = null;
+		String timestamp = null;
 		int counter;
 		Hashtag result = null;
 		try {
@@ -147,15 +144,18 @@ public class HBaseConnectionManager {
 			Scan scan = new Scan();
 			scan.addColumn(COLUMN_FAMILY_HASHTAGS, COLUMN_HASHTAGS_NAME);
 			scan.addColumn(COLUMN_FAMILY_HASHTAGS, COLUMN_HASHTAGS_COUNTER);
+			scan.addColumn(COLUMN_FAMILY_HASHTAGS, COLUMN_HASHTAGS_TIMESTAMP);
 			rs = table.getScanner(scan);
 			while ((res = rs.next()) != null) {
 
 				byte[] rohHashtag = res.getValue(COLUMN_FAMILY_HASHTAGS, COLUMN_HASHTAGS_NAME);
 				byte[] rohCounter = res.getValue(COLUMN_FAMILY_HASHTAGS, COLUMN_HASHTAGS_COUNTER);
+				byte[] rohTimestamp = res.getValue(COLUMN_FAMILY_HASHTAGS, COLUMN_HASHTAGS_TIMESTAMP);
 
 				hashtag = Bytes.toString(rohHashtag);
 				counter = Bytes.toInt(rohCounter);
-				result = new Hashtag (hashtag, counter);
+				timestamp = Bytes.toString(rohTimestamp);
+				result = new Hashtag (hashtag, counter, timestamp);
 				if (!resultList.contains(result) && !hashtag.isEmpty()) {
 					resultList.add(result);
 				}

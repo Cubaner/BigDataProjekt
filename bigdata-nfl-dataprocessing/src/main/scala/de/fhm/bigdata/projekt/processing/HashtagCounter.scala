@@ -27,9 +27,10 @@ object HashtagCounter {
     
    val trimmed_tweets2 = trimmed_tweets.map { x => x.replace("[","") }
    val trimmed_tweets3 = trimmed_tweets2.map { x => x.replace("]","") }
+   val trimmed_tweets4 = trimmed_tweets3.map { x => x.trim() }
     
-    trimmed_tweets3.map(t => "Tweettext: " + t).collect().foreach(println)
-    val wordCounts = trimmed_tweets3.map((_, 1)).reduceByKey(_ + _)
+    trimmed_tweets4.map(t => "Tweettext: " + t).collect().foreach(println)
+    val wordCounts = trimmed_tweets4.map((_, 1)).reduceByKey(_ + _)
     
     val filtered = wordCounts.filter(_._2 >= threshold)
     
@@ -45,7 +46,7 @@ object HashtagCounter {
         filtered.collect().foreach(y => {
        val a = y.toString().split(",")(0).replace("(", "")
        val b = y.toString().split(",")(1).replace(")", "")
-    	 //if (a != ""
+    	 if (a != "") {
       //var p = new Put();
       var p = new Put(new String(a + b + timestamp).getBytes()); //hashtag und timestamp?
 	  p.add("hashtag_family".getBytes(), "hashtag".getBytes(), 
@@ -54,7 +55,7 @@ object HashtagCounter {
 						b.getBytes());
 		p.add("hashtag_family".getBytes(), "timestamp".getBytes(), timestamp.getBytes());
 	  myTable.put(p);
-        } )
+    	 }} )
 	myTable.flushCommits();
    
     

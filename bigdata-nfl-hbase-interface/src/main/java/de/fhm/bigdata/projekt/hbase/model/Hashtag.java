@@ -7,11 +7,13 @@ public class Hashtag {
 	
 	private String name;
 	private Integer counter;
+	private String timestamp;
 	
 	
-	public Hashtag(String name, int counter) {
+	public Hashtag(String name, int counter, String timestamp) {
 		this.name = name;
 		this.counter = counter;
+		this.timestamp = timestamp;
 	}
 	
 	
@@ -26,6 +28,12 @@ public class Hashtag {
 	}
 	public void setCounter(int counter) {
 		this.counter = counter;
+	}
+	public String getTimestamo() {
+		return this.timestamp;
+	}
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 	
 	public static Comparator<Hashtag> getHashtagByCounter()
