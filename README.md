@@ -1,6 +1,6 @@
 # Readme - Big Data Project 2017
 
-This project is the z of the BigData Engineering Modul of Master of Science in Informations System at the University of Applied Science in Munster 
+This project is the z of the BigData Engineering Modul of Master of Science in Informations System at the University of Applied Science in Munster
 The Project is about a NFL Pipeline and use twitter input to count and show trends regarding to NFL and American Football.
 You find the presentation of the project with all assessment criteria in the assets/folder.
 
@@ -25,7 +25,7 @@ Make sure that it will be accessible by the user running the Oozie workflow to s
 ```
 $ hdfs dfs -mkdir /user/cloudera/tweets
 $ hadoop fs -chown -R cloudera:cloudera /user/cloudera
-$ hadoop fs -chmod -R 770 /user/cloudera
+$ hadoop fs -chmod -R 777 /user/cloudera
 $ sudo /etc/init.d/flume-ng-agent start
 ```
 Create the Flume agent in Cloudera Manager Web UI
@@ -158,12 +158,7 @@ LOCATION '/user/cloudera/tweets';
 
 ## 5. **Configure HBase**
 
-Open the Hue Webclient, Create new database and execute the commands below in the textfield
--> `Hue`-> `Hue Web UI` -> `Data Browsers` -> `HBase`
-
-Create table hashtag in HBase with
-Table Name: `hashtag`
-Column Families: `hashtag_family`
+Execute the following command in HBase Shell:
 ```
 $ create "hashtags", { NAME => "hashtag_family", VERSIONS => 3 }
 ```
@@ -182,12 +177,12 @@ $ oozie job -run -oozie http://quickstart.cloudera:11000/oozie -config job.prope
 Download and unzip Tomcat 8
 (https://tomcat.apache.org/download-80.cgi#8.0.41)
 
-Copy unziped folder to /opt/
+Copy unziped folder to /opt/ (su-Permissions needed)
 
 Add the following wars to Tomcat directory in /opt/
 ```
-$ cp ~/Bigdata/bigdata-nfl-hbase-interface/target/bigdata-nfl-hbase-Interface.war /opt/apache-tomcat-8.0.41/webapps/
-$ cp ~/Bigdata/bigdata-nfl-presentation/target/bigdata-nfl-presentation.war /opt/apache-tomcat-8.0.41/webapps/
+$ cp /home/cloudera/BigDataProjekt/bigdata-nfl-hbase-interface/target/bigdata-nfl-hbase-interface.war /opt/apache-tomcat-8.0.41/webapps/
+$ cp /home/cloudera/BigDataProjekt/bigdata-nfl-presentation/target/bigdata-nfl-presentation.war /opt/apache-tomcat-8.0.41/webapps/
 ```
 Configure the Apache Port in the configuration file.
 Browse to:
@@ -202,7 +197,7 @@ $ <Connector port="8081" protocol="HTTP/1.1"
 ```
 Start the tomcat with sudo command
 ```
-$ sudo bash /bin/catalina.sh start
+$ sudo bash /opt/apache-tomcat-8.0.41/bin/catalina.sh start
 ```
 Website available by using following uri
 ```
