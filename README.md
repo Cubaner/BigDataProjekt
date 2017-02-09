@@ -12,7 +12,7 @@ $ mvn clean install
 
 ## 2. **Configure the Flume agent**
 
-Start HDFS in the Cloudera Manager Web UI
+Start HDFS-Service in the Cloudera Manager Web UI
 Create the HDFS directory hierarchy for the Flume sink.
 Make sure that it will be accessible by the user running the Oozie workflow to start the application.  
 ```
@@ -30,11 +30,11 @@ Configure the Agent and add your twitter key and token
 
 You continue with the configuration of the flume agent
 
-- Go to the Flume Service page, click on the `Configuration` tab and select `View and Edit`
-- Select the Agent `Default`
+- Go to the Flume Service page, click on the `Configuration` tab
+- Go to Agent on the left side
 - Set the Agent Name property to `TwitterAgent`
 - Copy the content of the TwitterAgents below and paste them into `Configure File`
-- Afterwards click `Save Changes`
+
 ```
 TwitterAgent.sources = Twitter
 TwitterAgent.channels = MemChannel
@@ -62,6 +62,8 @@ TwitterAgent.channels.MemChannel.type = memory
 TwitterAgent.channels.MemChannel.capacity = 10000
 TwitterAgent.channels.MemChannel.transactionCapacity = 100
 ```
+- Click `Save Changes`
+
 Add the dataimport.jar to the Flume classpath
 Create first the directory
 ```
@@ -84,12 +86,13 @@ Ensures the accessibility to copy files
 $ su -l
 ```
 Copy the dataprocessing-SNAPSHOT.jar into oozie-workflows/lib/ (@ ~ you have to insert your own directory path)
+If asking to overwrite, say yes!
 ```
 $ cp ~/BigDataProjekt/bigdata-nfl-dataprocessing/target/bigdata-nfl-dataprocessing-1.0.0-SNAPSHOT.jar
 ~/BigData/BigDataProjekt/bigdata-nfl-oozie/oozie-workflows/lib/
 ```
 Change permissions in HDFS user/cloudera/ to 777 (read 7, write 7, execute 7)
-Click in Cloudera Manager Web UI: `Hue` -> `File Browser` -> `User` -> right click on cloudera -> `actions`
+Click in Cloudera Manager Web UI and start Hue-Service, then go to the Hue Web UI and click on: `File Browser` -> `User` -> right click on cloudera -> `actions`
 
 Copy bigdata-nfl-oozie Ordners in HDFS
 ```
@@ -110,10 +113,13 @@ Add hive.jar to /usr/lib/hive/lib/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar
 ```
 $ cp ~/BigDataProjekt/bigdata-nfl-hive/target/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar /usr/lib/hive/lib/
 ```
-Open the Hue Webclient, Create new database and execute the commands below in the textfield
--> `Hue`-> `Hue Web UI` -> `Data Browsers` -> `Query Editors` -> `Hive`
+Start Hive-Service in Cloudera Manager Web UI.
+Open the Hue Webclient, Create new table and execute the commands below in the textfield
+-> `Hue`-> `Hue Web UI` -> `Query Editors` -> `Hive`
 ```
-$ CREATE EXTERNAL TABLE tweets (
+$ ADD JAR /usr/lib/hive/lib/bigdata-nfl-hive-1.0.0-SNAPSHOT.jar;
+
+CREATE EXTERNAL TABLE tweets (
   id BIGINT,
   created_at STRING,
   source STRING,
@@ -146,7 +152,7 @@ LOCATION '/user/cloudera/tweets';
 ## 5. **Configure HBase**
 
 Open the Hue Webclient, Create new database and execute the commands below in the textfield
--> `Hue`-> `Hue Web UI` -> `Data Browsers` -> `Data Browsers` -> `HBase`
+-> `Hue`-> `Hue Web UI` -> `Data Browsers` -> `HBase`
 
 Create table hashtag in HBase with
 Table Name: `hashtag`
