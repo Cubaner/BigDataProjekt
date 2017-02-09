@@ -1,4 +1,11 @@
 # Readme - Big Data Project 2017
+
+This project is the z of the BigData Engineering Modul of Master of Science in Informations System at the University of Applied Science in Munster 
+The Project is about a NFL Pipeline and use twitter input to count and show trends regarding to NFL and American Football.
+You find the presentation of the project with all assessment criteria in the assets/folder.
+
+You have to use the following instructions to get Started with the Pipeline.
+
 ## *Analyzing nfl-twitter data by using CDH 5.8*
 
 Before you get started with the application, you will first need to install CDH 5.8. Specifically, you will need Hadoop, Flume, Oozie, and Hive. The easiest way to get the core components is to use Cloudera Manager to set up your initial environment. You can download the vm image here: (http://www.cloudera.com/downloads/quickstart_vms/5-8.html) How to set up the configuration will be explained in detail within the following steps.
@@ -46,7 +53,7 @@ TwitterAgent.sources.Twitter.consumerKey = <--->
 TwitterAgent.sources.Twitter.consumerSecret = <---> #specific user Tokens
 TwitterAgent.sources.Twitter.accessToken = <--->
 TwitterAgent.sources.Twitter.accessTokenSecret = <--->
-TwitterAgent.sources.Twitter.keywords = nfl, nflran, gopacksgo, hawks, probowl, rannfl, superbowl, brady, super bowl, mattryan
+TwitterAgent.sources.Twitter.keywords = nfl, nflran, gopacksgo, hawks, probowl, rannfl, superbowl, brady, super bowl, mattryan, brady, pats, americanfootball, football, rodgers, draft, touchdown, quarterback, flag, 49ers, cardinals
 
 TwitterAgent.sinks.HDFS.channel = MemChannel
 TwitterAgent.sinks.HDFS.type = hdfs
