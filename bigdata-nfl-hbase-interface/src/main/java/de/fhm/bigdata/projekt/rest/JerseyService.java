@@ -44,10 +44,10 @@ public class JerseyService {
 	
 	private ArrayList<NFLTeam> createTestTeams() {
 		ArrayList<NFLTeam> test = new ArrayList<NFLTeam>();
-		test.add(new NFLTeam("GreenBayPackers", 1, 1, null, null, null));
-		test.add(new NFLTeam("ArizonaCardinals", 2, 1, null, null, null));
-		test.add(new NFLTeam("Patriots", 7, 13, null, null, null));
-		test.add(new NFLTeam("Falcons", 2, 8, null, null, null));
+		test.add(new NFLTeam("Green Bay Packers", 1, 1, null, null, null));
+		test.add(new NFLTeam("Arizona Cardinals", 2, 1, null, null, null));
+		test.add(new NFLTeam("New England Patriots", 7, 13, null, null, null));
+		test.add(new NFLTeam("Atlanta Falcons", 2, 8, null, null, null));
 		
 		return test;		
 	}
